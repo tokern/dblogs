@@ -20,11 +20,12 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-      - image: severalnines/proxysql:2.0.4
+      - image: proxysql:0.0.5
         name: proxysql
         volumeMounts:
         - name: proxysql-config
           mountPath: /etc/proxysql/proxysql.cnf
+          subPath: proxysql.cnf
         ports:
         - containerPort: 6033
           name: proxysql-mysql
@@ -33,7 +34,7 @@ spec:
       volumes:
       - name: proxysql-config
         configMap:
-          name: proxysql-configmap-v2
+          name: proxysql-configmap-v3
 ---
 apiVersion: v1
 kind: Service
