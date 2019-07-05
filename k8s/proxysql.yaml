@@ -20,7 +20,7 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-      - image: proxysql:0.0.5
+      - image: proxysql:0.0.7
         name: proxysql
         volumeMounts:
         - name: proxysql-config
