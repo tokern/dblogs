@@ -26,6 +26,10 @@ spec:
         - name: proxysql-config
           mountPath: /etc/proxysql/proxysql.cnf
           subPath: proxysql.cnf
+        - name: proxysql-lib
+          mountPath: /var/lib/proxysql
+        - name: proxysql-log
+          mountPath: /var/log/proxysql
         ports:
         - containerPort: 6033
           name: proxysql-mysql
@@ -34,7 +38,13 @@ spec:
       volumes:
       - name: proxysql-config
         configMap:
-          name: proxysql-configmap-v3
+          name: proxysql-configmap-v5
+      - name: proxysql-lib
+        persistentVolumeClaim:
+          claimName: proxysql-datadir-claim
+      - name: proxysql-log
+        persistentVolumeClaim:
+          claimName: proxysql-logdir-claim
 ---
 apiVersion: v1
 kind: Service
