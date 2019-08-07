@@ -1,7 +1,7 @@
 FROM debian:stretch
-MAINTAINER Ashraf Sharif <ashraf@severalnines.com>
+MAINTAINER Rajat Venkatesh <vrajat@dblint.io>
 
-ENV VERSION 2.0.5-dblint-2
+ENV VERSION 2.0.6-dblint-1
     
 COPY proxysql_${VERSION}-debian9_amd64.deb /opt/proxysql_${VERSION}-debian9_amd64.deb
 

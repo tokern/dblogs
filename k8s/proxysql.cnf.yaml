@@ -30,6 +30,8 @@ data:
             sessions_sort=true
             monitor_username="proxysql"
             monitor_password="proxysqlpassw0rd"
+            eventslog_filename="queries.log"
+            eventslog_format=2
     }
     mysql_replication_hostgroups =
     (
@@ -57,6 +59,13 @@ data:
                     active=1
                     match_pattern=".*"
                     destination_hostgroup=10
+                    apply=1
+            },
+            {
+                    rule_id=300
+                    active=1
+                    match_pattern=".*"
+                    log=1
                     apply=1
             }
     )
