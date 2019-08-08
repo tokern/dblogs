@@ -43,9 +43,9 @@ spec:
           subPath: logrotate.conf
         - name: proxysql-log
           mountPath: /var/log/proxysql
-      - name: log-stdout
+      - name: logstdout
         image: busybox
-        args: [/bin/sh, -c, 'tail -n+1 -f /var/log/proxysql/queries.00000001'] 
+        args: [/bin/sh, -c, 'tail -q -n+1 -f /var/log/proxysql/queries.????????'] 
         volumeMounts:
         - name: proxysql-log
           mountPath: /var/log/proxysql
@@ -62,23 +62,3 @@ spec:
       - name: logrotate-config
         configMap:
           name: logrotate-configmap-v1
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: proxysql
-  labels:
-    app: proxysql
-    tier: frontend
-spec:
-  type: NodePort
-  ports:
-    - nodePort: 30033
-      port: 6033
-      name: proxysql-mysql
-    - nodePort: 30032
-      port: 6032
-      name: proxysql-admin
-  selector:
-    app: proxysql
-    tier: frontend        
