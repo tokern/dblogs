@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  proxysql.cnf: |
+    /var/log/proxysql {
+      rotate 5
+      copytruncate
+      size 100M
+      missingok
+      compress
+    }   
+kind: ConfigMap
+metadata:
+  name: logrotate-configmap-v1
+  namespace: default
+

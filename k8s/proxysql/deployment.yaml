@@ -35,6 +35,14 @@ spec:
           name: proxysql-mysql
         - containerPort: 6032
           name: proxysql-admin
+      - image: logrotate:0.2.0
+        name: logrotate
+        volumeMounts:
+        - name: logrotate-config
+          mountPath: /etc/logrotate/logrotate.conf
+          subPath: logrotate.conf
+        - name: proxysql-log
+          mountPath: /var/log/proxysql
       volumes:
       - name: proxysql-config
         configMap:
@@ -45,6 +53,9 @@ spec:
       - name: proxysql-log
         persistentVolumeClaim:
           claimName: proxysql-logdir-claim
+      - name: logrotate-config
+        configMap:
+          name: logrotate-configmap-v1
 ---
 apiVersion: v1
 kind: Service
