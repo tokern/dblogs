@@ -43,6 +43,12 @@ spec:
           subPath: logrotate.conf
         - name: proxysql-log
           mountPath: /var/log/proxysql
+      - name: log-stdout
+        image: busybox
+        args: [/bin/sh, -c, 'tail -n+1 -f /var/log/proxysql/queries.00000001'] 
+        volumeMounts:
+        - name: proxysql-log
+          mountPath: /var/log/proxysql
       volumes:
       - name: proxysql-config
         configMap:
