@@ -38,7 +38,7 @@ spec:
       volumes:
       - name: proxysql-config
         configMap:
-          name: proxysql-configmap-v5
+          name: proxysql-configmap-v6
       - name: proxysql-lib
         persistentVolumeClaim:
           claimName: proxysql-datadir-claim

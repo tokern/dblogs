@@ -9,10 +9,11 @@ data:
     mysql_variables=
     {
             eventslog_filename="/var/log/proxysql/queries"
+            eventslog_filesize=1073741824
             eventslog_format=2
             monitor_username="proxysql"
             monitor_password="proxysqlpassw0rd"
-            server_version="proxysql-0.0.8"
+            server_version="5.7.22-standard"
     }
     mysql_replication_hostgroups = ()
     mysql_servers =
@@ -23,32 +24,14 @@ data:
     mysql_query_rules =
     (
             {
-                    rule_id=100
+                    rule_id=1
                     active=1
-                    match_pattern="^SELECT .*"
-                    destination_hostgroup=10
-                    apply=1
-            },
-            {
-                    rule_id=200
-                    active=1
-                    match_pattern=".*"
-                    destination_hostgroup=10
-                    apply=1
-            },
-            {
-                    rule_id=300
-                    active=1
-                    match_pattern=".*"
+                    match_digest="."
                     log=1
-                    apply=1
+                    apply=0
             }
     )
 kind: ConfigMap
 metadata:
-  creationTimestamp: "2019-07-04T04:45:44Z"
-  name: proxysql-configmap-v5
+  name: proxysql-configmap-v6
   namespace: default
-  resourceVersion: "238071"
-  selfLink: /api/v1/namespaces/default/configmaps/proxysql-configmap-v3
-  uid: fac3f667-3858-47a7-878f-37dcd7d8a8ad
