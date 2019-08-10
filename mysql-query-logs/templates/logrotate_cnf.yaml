@@ -1,7 +1,7 @@
 apiVersion: v1
 data:
   logrotate.conf: |
-    "{{ .Values.proxysql.config.eventsDir }}/queries.*" {
+    "{{ .Values.proxysql.config.eventsDir }}/{{ .Values.proxysql.config.eventsFile }}.????????" {
       rotate {{ .Values.logrotate.config.rotate }}
       copytruncate
       size {{ .Values.logrotate.config.size }}

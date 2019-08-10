@@ -64,4 +64,4 @@ spec:
           claimName: proxysql-logdir-claim
       - name: logrotate-config
         configMap:
-          name: logrotate-configmap-v4
+          name: logrotate-configmap-v5
