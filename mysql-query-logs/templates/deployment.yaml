@@ -37,6 +37,9 @@ spec:
           volumeMounts:
             {{- toYaml .Values.volumeMounts | nindent 12 }}
         - name: logrotate
+          env:
+            - name: CRON_SCHEDULE
+              value: "{{ .Values.logrotate.config.cronSchedule }}"
           image: "{{ .Values.logrotate.imageRepository }}:{{ .Values.logrotate.imageTag }}"
           imagePullPolicy: {{ .Values.proxysql.imagePullPolicy }}
           resources:

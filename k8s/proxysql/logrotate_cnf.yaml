@@ -1,15 +1,15 @@
 apiVersion: v1
 data:
   logrotate.conf: |
-    /var/log/proxysql {
+    "/var/log/proxysql/*" {
       rotate 5
       copytruncate
-      size 100M
+      size 10K
       missingok
       compress
     }   
 kind: ConfigMap
 metadata:
-  name: logrotate-configmap-v2
+  name: logrotate-configmap-v4
   namespace: default
 
