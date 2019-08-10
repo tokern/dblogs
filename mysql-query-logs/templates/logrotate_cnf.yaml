@@ -11,5 +11,6 @@ data:
 kind: ConfigMap
 metadata:
   name: "{{ include "mysql-query-logs.fullname" . }}-logrotate-config"
-  namespace: default
+  labels:
+{{ include "mysql-query-logs.labels" . | indent 4 }}
 

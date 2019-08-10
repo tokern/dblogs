@@ -34,4 +34,5 @@ data:
 kind: ConfigMap
 metadata:
   name: "{{ include "mysql-query-logs.fullname" . }}-proxysql-config"
-  namespace: default
+  labels:
+{{ include "mysql-query-logs.labels" . | indent 4 }}
