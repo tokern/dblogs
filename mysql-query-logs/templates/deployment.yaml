@@ -28,9 +28,9 @@ spec:
           image: "{{ .Values.proxysql.imageRepository }}:{{ .Values.proxysql.imageTag }}"
           imagePullPolicy: {{ .Values.proxysql.imagePullPolicy }}
           ports:
-          - name: mysqlPort
+          - name: mysql-port
             containerPort: {{ .Values.proxysql.mysqlPort }}
-          - name: adminPort
+          - name: admin-port
             containerPort: {{ .Values.proxysql.adminPort }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
@@ -47,8 +47,9 @@ spec:
           volumeMounts:
             {{- toYaml .Values.volumeMounts | nindent 12 }}
         - name: logstdout
-          image: "{{ .Values.logstdout.imageRepository }}:{{ .Values.logstdout.imageTag }}"
+          image: "{{ .Values.logstdout.imageRepository }}"
           imagePullPolicy: {{ .Values.proxysql.imagePullPolicy }}
+          args: [/bin/sh, -c, 'tail -q -n+1 -F /var/log/proxysql/queries.????????'] 
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
@@ -67,15 +68,15 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       volumes:
-      - name: proxysqlConfig
+      - name: proxysql-config
         configMap:
           name: "{{ include "mysql-query-logs.fullname" . }}-proxysql-config"
-      - name: proxysqlLib
+      - name: proxysql-lib
         persistentVolumeClaim:
           claimName: "{{ include "mysql-query-logs.fullname" . }}-datadir-pvc"
-      - name: proxysqlLog
+      - name: proxysql-log
         persistentVolumeClaim:
           claimName: "{{ include "mysql-query-logs.fullname" . }}-logdir-pvc"
-      - name: logrotateConfig
+      - name: logrotate-config
         configMap:
           name: "{{ include "mysql-query-logs.fullname" . }}-logrotate-config"

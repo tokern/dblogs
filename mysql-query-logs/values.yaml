@@ -11,11 +11,11 @@ fullnameOverride: ""
 service:
   type: NodePort
   ports:
-  - name: mysqlPort
-    nodePort: 30033
+  - name: mysql-port
+    nodePort: 31033
     port: 6033
-  - name: adminPort
-    nodePort: 30032
+  - name: admin-port
+    nodePort: 31032
     port: 6032
 
 ingress:
@@ -92,7 +92,6 @@ logstdout:
   mysqlPort: 6033
   adminPort: 6032
   imageRepository: busybox
-  imageTag: stable
   imagePullPolicy: IfNotPresent
   resources: {}
   # limits:
@@ -103,14 +102,14 @@ logstdout:
   #   memory: 128Mi
 
 volumeMounts:
-- name: proxysqlConfig
+- name: proxysql-config
   mountPath: /etc/proxysql/proxysql.cnf
   subPath: proxysql.cnf
-- name: proxysqlLib
+- name: proxysql-lib
   mountPath: /var/lib/proxysql
-- name: proxysqlLog
+- name: proxysql-log
   mountPath: /var/log/proxysql
-- name: logrotateConfig
+- name: logrotate-config
   mountPath: /etc/logrotate/logrotate.conf
   subPath: logrotate.conf
 
