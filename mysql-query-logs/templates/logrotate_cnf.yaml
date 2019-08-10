@@ -10,6 +10,6 @@ data:
     }   
 kind: ConfigMap
 metadata:
-  name: logrotate-configmap
+  name: "{{ include "mysql-query-logs.fullname" . }}-logrotate-config"
   namespace: default
 

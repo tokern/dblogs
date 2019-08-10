@@ -33,5 +33,5 @@ data:
     )
 kind: ConfigMap
 metadata:
-  name: proxysql-configmap
+  name: "{{ include "mysql-query-logs.fullname" . }}-proxysql-config"
   namespace: default
