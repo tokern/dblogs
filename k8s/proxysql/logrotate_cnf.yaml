@@ -1,6 +1,6 @@
 apiVersion: v1
 data:
-  proxysql.cnf: |
+  logrotate.conf: |
     /var/log/proxysql {
       rotate 5
       copytruncate
@@ -10,6 +10,6 @@ data:
     }   
 kind: ConfigMap
 metadata:
-  name: logrotate-configmap-v1
+  name: logrotate-configmap-v2
   namespace: default
 
