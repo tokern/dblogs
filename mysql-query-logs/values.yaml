@@ -109,7 +109,7 @@ volumeMounts:
   mountPath: /var/lib/proxysql
 - name: proxysqlLog
   mountPath: /var/log/proxysql
-- name: logrotate-config
+- name: logrotateConfig
   mountPath: /etc/logrotate/logrotate.conf
   subPath: logrotate.conf
 

@@ -32,14 +32,6 @@ spec:
             containerPort: {{ .Values.proxysql.mysqlPort }}
           - name: adminPort
             containerPort: {{ .Values.proxysql.adminPort }}
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
@@ -47,14 +39,6 @@ spec:
         - name: logrotate
           image: "{{ .Values.logrotate.imageRepository }}:{{ .Values.logrotate.imageTag }}"
           imagePullPolicy: {{ .Values.proxysql.imagePullPolicy }}
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
@@ -62,14 +46,6 @@ spec:
         - name: logstdout
           image: "{{ .Values.logstdout.imageRepository }}:{{ .Values.logstdout.imageTag }}"
           imagePullPolicy: {{ .Values.proxysql.imagePullPolicy }}
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
@@ -88,15 +64,15 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       volumes:
-      - name: proxysql-config
+      - name: proxysqlConfig
         configMap:
-          name: proxysql-configmap
-      - name: proxysql-lib
+          name: "{{ include "mysql-query-logs.fullname" . }}-proxysql-config"
+      - name: proxysqlLib
         persistentVolumeClaim:
           claimName: "{{ include "mysql-query-logs.fullname" . }}-datadir-pvc"
-      - name: proxysql-log
+      - name: proxysqlLog
         persistentVolumeClaim:
           claimName: "{{ include "mysql-query-logs.fullname" . }}-logdir-pvc"
-      - name: logrotate-config
+      - name: logrotateConfig
         configMap:
-          name: logrotate-configmap
+          name: "{{ include "mysql-query-logs.fullname" . }}-logrotate-config"
