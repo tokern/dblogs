@@ -41,8 +41,4 @@ if [ $MONITOR_CONFIG_CHANGE ]; then
 fi
 
 # Start ProxySQL with PID 1
-ls -l /etc/
-ls -l /etc/proxysql/
-ls -l /etc/proxysql/proxysql.cnf
-cat /etc/proxysql.cnf
 exec proxysql -f $CMDARG -c $CONFIG
