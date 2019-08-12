@@ -1,7 +1,0 @@
-microk8s.kubectl run -it --rm --image=mysql:8.0 --restart=Never mysql-client -- mysql -h <internal ip> -p<password> -u <user>
-mysql --default-auth=mysql_native_password -u <user> -h <proxysql external ip> -P<proxysql port> -p<password>
-microk8s.kubectl exec -it <proxysql-pod> -- mysql -h 127.0.0.1 -u <proxysql-admin> -p<proxysql password> -P <proxysql port>
-
-
-docker save proxysql:<version> > /tmp/proxysql.tar
-microk8s.ctr -n k8s.io image import /tmp/proxysql.tar
