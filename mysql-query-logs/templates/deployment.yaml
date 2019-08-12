@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ include "mysql-query-logs.fullname" . }}-deployment"
+  labels:
+{{ include "mysql-query-logs.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "mysql-query-logs.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "mysql-query-logs.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      restartPolicy: Always
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      containers:
+        - name: proxysql
+          image: "{{ .Values.proxysql.imageRepository }}:{{ .Values.proxysql.imageTag }}"
+          imagePullPolicy: {{ .Values.proxysql.imagePullPolicy }}
+          ports:
+          - name: mysql-port
+            containerPort: {{ .Values.proxysql.mysqlPort }}
+          - name: admin-port
+            containerPort: {{ .Values.proxysql.adminPort }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            {{- toYaml .Values.volumeMounts | nindent 12 }}
+        - name: logrotate
+          env:
+            - name: CRON_SCHEDULE
+              value: "{{ .Values.logrotate.config.cronSchedule }}"
+          image: "{{ .Values.logrotate.imageRepository }}:{{ .Values.logrotate.imageTag }}"
+          imagePullPolicy: {{ .Values.proxysql.imagePullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            {{- toYaml .Values.volumeMounts | nindent 12 }}
+        - name: logstdout
+          image: "{{ .Values.logstdout.imageRepository }}"
+          imagePullPolicy: {{ .Values.proxysql.imagePullPolicy }}
+          args: [/bin/sh, -c, 'tail -q -n+1 -F /var/log/proxysql/queries.????????'] 
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            {{- toYaml .Values.volumeMounts | nindent 12 }}
+
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      volumes:
+      - name: proxysql-config
+        configMap:
+          name: "{{ include "mysql-query-logs.fullname" . }}-proxysql-config"
+      - name: proxysql-lib
+        persistentVolumeClaim:
+          claimName: "{{ include "mysql-query-logs.fullname" . }}-datadir-pvc"
+      - name: proxysql-log
+        persistentVolumeClaim:
+          claimName: "{{ include "mysql-query-logs.fullname" . }}-logdir-pvc"
+      - name: logrotate-config
+        configMap:
+          name: "{{ include "mysql-query-logs.fullname" . }}-logrotate-config"

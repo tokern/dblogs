@@ -1,0 +1,38 @@
+apiVersion: v1
+data:
+  proxysql.cnf: |
+    datadir="{{ .Values.proxysql.config.dataDir }}"
+    admin_variables=
+    {
+            admin_credentials="{{ .Values.proxysql.config.adminUser }}:{{ .Values.proxysql.config.adminPassword }}"
+    }
+    mysql_variables=
+    {
+            eventslog_filename="{{ .Values.proxysql.config.eventsDir }}/{{ .Values.proxysql.config.eventsFile }}"
+            eventslog_filesize=1073741824
+            eventslog_format=2
+            monitor_username="{{ .Values.proxysql.config.monitorUser }}"
+            monitor_password="{{ .Values.proxysql.config.monitorPassword }}"
+            server_version="{{ .Values.proxysql.config.serverVersion }}"
+    }
+    mysql_replication_hostgroups = ()
+    mysql_servers = 
+    (
+            { address="{{ .Values.proxysql.config.mysqlAddress }}", port={{ .Values.proxysql.config.mysqlPort }}, hostgroup={{ .Values.proxysql.config.mysqlHostGroup }} },
+    )
+    mysql_users = ()
+    mysql_query_rules =
+    (
+            {
+                    rule_id=1
+                    active=1
+                    match_digest="."
+                    log=1
+                    apply=0
+            }
+    )
+kind: ConfigMap
+metadata:
+  name: "{{ include "mysql-query-logs.fullname" . }}-proxysql-config"
+  labels:
+{{ include "mysql-query-logs.labels" . | indent 4 }}

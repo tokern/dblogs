@@ -37,6 +37,9 @@ spec:
           name: proxysql-admin
       - image: logrotate:0.2.0
         name: logrotate
+        env:
+          - name: CRON_SCHEDULE
+            value: "*/5 * * * *"
         volumeMounts:
         - name: logrotate-config
           mountPath: /etc/logrotate/logrotate.conf
@@ -61,4 +64,4 @@ spec:
           claimName: proxysql-logdir-claim
       - name: logrotate-config
         configMap:
-          name: logrotate-configmap-v1
+          name: logrotate-configmap-v5

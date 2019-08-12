@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "mysql-query-logs.fullname" . }}-test-connection"
+  labels:
+{{ include "mysql-query-logs.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['{{ include "mysql-query-logs.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
