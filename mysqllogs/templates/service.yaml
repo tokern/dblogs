@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ include "mysql-query-logs.fullname" . }}-service"
+  name: "{{ include "mysqllogs.fullname" . }}-service"
   labels:
-{{ include "mysql-query-logs.labels" . | indent 4 }}
+{{ include "mysqllogs.labels" . | indent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
     {{- toYaml .Values.service.ports | nindent 4 }}
   selector:
-    app.kubernetes.io/name: {{ include "mysql-query-logs.name" . }}
+    app.kubernetes.io/name: {{ include "mysqllogs.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

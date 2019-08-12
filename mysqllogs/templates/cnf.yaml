@@ -33,6 +33,6 @@ data:
     )
 kind: ConfigMap
 metadata:
-  name: "{{ include "mysql-query-logs.fullname" . }}-proxysql-config"
+  name: "{{ include "mysqllogs.fullname" . }}-proxysql-config"
   labels:
-{{ include "mysql-query-logs.labels" . | indent 4 }}
+{{ include "mysqllogs.labels" . | indent 4 }}
