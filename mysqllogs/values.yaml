@@ -1,0 +1,116 @@
+# Default values for mysqllogs.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: NodePort
+  ports:
+  - name: mysql-port
+    nodePort: 31033
+    port: 6033
+  - name: admin-port
+    nodePort: 31032
+    port: 6032
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+  
+# We usually recommend not to specify default resources and to leave this as a conscious
+# choice for the user. This also increases chances charts run on environments with little
+# resources, such as Minikube. If you do want to specify resources, uncomment the following
+# lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+proxysql:
+  mysqlPort: 6033
+  adminPort: 6032
+  imageRepository: dblintio/proxysql
+  imageTag: stable
+  imagePullPolicy: IfNotPresent
+  resources: {}
+  config: 
+    adminUser: proxysql-admin
+    adminPassword: adminpassw0rd
+    dataDir: /var/lib/proxysql
+    eventsDir: /var/log/proxysql
+    eventsFile: queries
+    monitorUser: proxysql
+    monitorPassword: proxysqlpassw0rd
+    serverVersion: 5.7.22-standard
+    mysqlAddress: mysql
+    mysqlPort: 3306
+    mysqlHostGroup: 10
+
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+logrotate:
+  mysqlPort: 6033
+  adminPort: 6032
+  imageRepository: dblintio/proxysql-logrotate
+  imageTag: stable
+  imagePullPolicy: IfNotPresent
+  config:
+    cronSchedule: "0 * * * *" 
+    rotate: 5
+    size: 100M
+  resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+logstdout:
+  mysqlPort: 6033
+  adminPort: 6032
+  imageRepository: busybox
+  imagePullPolicy: IfNotPresent
+  resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+volumeMounts:
+- name: proxysql-config
+  mountPath: /etc/proxysql/proxysql.cnf
+  subPath: proxysql.cnf
+- name: proxysql-lib
+  mountPath: /var/lib/proxysql
+- name: proxysql-log
+  mountPath: /var/log/proxysql
+- name: logrotate-config
+  mountPath: /etc/logrotate/logrotate.conf
+  subPath: logrotate.conf
+
+ 
