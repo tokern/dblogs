@@ -16,7 +16,7 @@ Choose a name for the helm chart.
 
 Create two persistent volumes for data and log directories. It is important
 that the persistent volumes have the label:
-- app:<name>
+- app:_name_
 
 ### Installation
 
