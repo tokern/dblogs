@@ -13,7 +13,7 @@ bastion node and captures all the activity.
 
 Data Warehouse and Data Lake Engines do provide ways to capture all activity.
 However there is no standard way to capture these logs. This project captures
-the best practices to capture the activity logs.
+the best practices to capture activity logs.
 
 ## Supported Databases
-1. [mysqllogs](mysqllogs/README.md)
+1. [MySQL](mysqllogs/README.md)
